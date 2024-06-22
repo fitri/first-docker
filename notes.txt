@@ -1,0 +1,106 @@
+Docker with Mosh
+https://www.youtube.com/watch?v=pTFZFxd4hOI
+
+Why docker?
+- Duplicate exact env as development machine.
+- Isolated env for environment for different works.
+
+
+Virtual Machine vs Container
+Virtual Machine emulating same or different OS taking up physical hardware allocation while container use host OS and can be specifiy how much resouces provided (thru original OS management).
+
+Docker Architecture
+Using client-server(docker engine) architecture
+
+Container use the same resources host, shared kernel of the host itself (hardware managed by kernel).
+
+Docker is native to Linux, on Windows it use Windows-Linux kernel (WSL) while on Mac it use lightweight Linux virtual machine.
+
+Installation
+For Mac download the dmg file and copy to the Application folder, then run the application file and setup first before proceed to commandline.
+
+On commandline once the setup finish: docker version
+
+Development Workflow with Docker
+We configured our development folder with dockerfile which will take everything we have and turn in into docker images.
+
+Images contain minimum env from development to run the project.
+
+Then we run the application inside of the docker with docker command, it will take up the images built and run it inside of docker process.
+
+We also can push it from dev machine to central repo like Dockerhub (something like Github but for docker images) then we can pull it test/prod machine like AWS.
+
+Simple Docker 
+Create an empty dir: mkdir simple-docker
+Initialize git: git init
+Create docker file: touch Dockerfile
+
+Dockerfile configuration
+# getting ready made images containing node env from dockerhub
+# after : is the flavour of the linux, refer dockerhub for which one to use
+FROM node:alpine
+
+# we copied all files/folder from current dev dir into the images file system in /app folder
+COPY . /app
+
+# then we execute the command from the images dir we created just now, we marked the /app as workdir then this will be default dir so we don't need to specify the dir name when running
+WORKDIR /app
+CMD node app.js
+
+
+Building the images
+
+run: docker build -t first-docker . 
+The -t flag used to identify docker images on our system, once the command run, it will created the images but will not stored inside our workdir, images is not a single files, it integrate/include with docker system files as well.
+
+** to push to dockerhub the -t need to be in format of username/<tag-name>, so better to use this format.
+docker build -t fitrialrahim/first-docker .
+
+To push to dockerhub (make sure register first and use the same username)
+docker push fitrialrahim/first-docker
+
+To pull the images from dockerhub
+docker pull fitrialrahim/first-docker
+
+To list docker images on our system
+docker image ls
+
+To run the application from the docker images just now
+docker run fitrialrahim/first-docker
+
+
+Error encounter
+WARNING: The requested image's platform (linux/arm64) does not match the detected host platform (linux/amd64/v3) and no specific platform was requested
+
+The built and run machine not compatible, pending solution for this.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
